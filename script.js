@@ -5,16 +5,20 @@
 // ---- CONFIG: EDIT THESE BEFORE DEPLOYING ----
 const CURRENT_PRICE = 4999;
 const FUTURE_PRICE = 14999;
+const CURRENT_PRICE_USD = 9;
+const FUTURE_PRICE_USD = 19;
 // Replace the line below with the real launch-price deadline before deploying.
 // Format: "YYYY-MM-DDTHH:MM:SS+01:00"  (+01:00 = West Africa Time / Nigeria)
-// Example: "2026-09-10T23:59:59+01:00"
-const PRICE_INCREASE_DATE = "2026-09-10T23:59:59+01:00";
-
+// Example: "2026-09-15T23:59:59+01:00"
+const PRICE_INCREASE_DATE = "REPLACE_WITH_REAL_DATE";
 
 const SELAR_LINK = "https://selar.com/8arv3007y1";
 
 function formatNaira(n){
   return "₦" + n.toLocaleString("en-NG");
+}
+function formatUSD(n){
+  return "$" + n;
 }
 
 // ---- COUNTDOWN ----
@@ -27,9 +31,11 @@ function initCountdown(){
   const stickyPrice = document.getElementById('sticky-price');
   const priceNodes = [document.getElementById('price-now'), document.getElementById('price-now-2')];
   const priceWasNodes = [document.getElementById('price-was'), document.getElementById('price-was-2')];
+  const priceUsdNodes = [document.getElementById('price-usd'), document.getElementById('price-usd-2')];
+  const priceUsdWasNodes = [document.getElementById('price-usd-was'), document.getElementById('price-usd-was-2')];
   const captionNodes = [document.getElementById('price-caption'), document.getElementById('price-caption-2')];
   const savingsNote = document.getElementById('savings-note');
-  const countdownBlock = document.getElementById('countdown-2');
+  const countdownBlocks = [document.getElementById('countdown-1'), document.getElementById('countdown-2')];
   const ctaButtons = [
     document.getElementById('cta-hero'),
     document.getElementById('cta-offer'),
@@ -39,9 +45,11 @@ function initCountdown(){
   function setExpiredState(){
     priceNodes.forEach(n => { if(n) n.textContent = formatNaira(FUTURE_PRICE); });
     priceWasNodes.forEach(n => { if(n) n.style.display = 'none'; });
+    priceUsdNodes.forEach(n => { if(n) n.textContent = formatUSD(FUTURE_PRICE_USD); });
+    priceUsdWasNodes.forEach(n => { if(n) n.style.display = 'none'; });
     captionNodes.forEach(n => { if(n) n.textContent = 'Launch price has ended'; });
     if (savingsNote) savingsNote.style.display = 'none';
-    if (countdownBlock) countdownBlock.style.display = 'none';
+    countdownBlocks.forEach(cb => { if (cb) cb.style.display = 'none'; });
     if (topbarTimer) topbarTimer.textContent = 'now ' + formatNaira(FUTURE_PRICE);
     if (stickyTimer) stickyTimer.textContent = '';
     if (stickyPrice) stickyPrice.textContent = formatNaira(FUTURE_PRICE);
@@ -57,9 +65,11 @@ function initCountdown(){
     // No real deadline configured yet — show launch price without a ticking countdown.
     priceNodes.forEach(n => { if(n) n.textContent = formatNaira(CURRENT_PRICE); });
     priceWasNodes.forEach(n => { if(n) n.textContent = formatNaira(FUTURE_PRICE); });
+    priceUsdNodes.forEach(n => { if(n) n.textContent = formatUSD(CURRENT_PRICE_USD); });
+    priceUsdWasNodes.forEach(n => { if(n) n.textContent = formatUSD(FUTURE_PRICE_USD); });
     captionNodes.forEach(n => { if(n) n.textContent = 'Launch price'; });
     if (topbarTimer) topbarTimer.textContent = 'limited-time launch price';
-    if (countdownBlock) countdownBlock.style.display = 'none';
+    countdownBlocks.forEach(cb => { if (cb) cb.style.display = 'none'; });
     if (stickyTimer) stickyTimer.textContent = '';
   }
 
@@ -80,14 +90,16 @@ function initCountdown(){
 
     const pad = v => String(v).padStart(2,'0');
 
-    const d2 = document.getElementById('cd-days-2');
-    const h2 = document.getElementById('cd-hours-2');
-    const m2 = document.getElementById('cd-mins-2');
-    const s2 = document.getElementById('cd-secs-2');
-    if (d2) d2.textContent = pad(days);
-    if (h2) h2.textContent = pad(hours);
-    if (m2) m2.textContent = pad(mins);
-    if (s2) s2.textContent = pad(secs);
+    ['1','2'].forEach(suffix => {
+      const d = document.getElementById('cd-days-' + suffix);
+      const h = document.getElementById('cd-hours-' + suffix);
+      const m = document.getElementById('cd-mins-' + suffix);
+      const s = document.getElementById('cd-secs-' + suffix);
+      if (d) d.textContent = pad(days);
+      if (h) h.textContent = pad(hours);
+      if (m) m.textContent = pad(mins);
+      if (s) s.textContent = pad(secs);
+    });
 
     const shortLabel = days > 0 ? `${days}d ${pad(hours)}h left` : `${pad(hours)}h ${pad(mins)}m left`;
     if (topbarTimer) topbarTimer.textContent = `ends in ${shortLabel}`;
@@ -109,6 +121,8 @@ function initCountdown(){
 
   priceNodes.forEach(n => { if(n) n.textContent = formatNaira(CURRENT_PRICE); });
   priceWasNodes.forEach(n => { if(n) n.textContent = formatNaira(FUTURE_PRICE); });
+  priceUsdNodes.forEach(n => { if(n) n.textContent = formatUSD(CURRENT_PRICE_USD); });
+  priceUsdWasNodes.forEach(n => { if(n) n.textContent = formatUSD(FUTURE_PRICE_USD); });
   tick();
   timerInterval = setInterval(tick, 1000);
 }
