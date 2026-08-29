@@ -5,12 +5,10 @@
 // ---- CONFIG: EDIT THESE BEFORE DEPLOYING ----
 const CURRENT_PRICE = 4999;
 const FUTURE_PRICE = 14999;
-const CURRENT_PRICE_USD = 9;
-const FUTURE_PRICE_USD = 19;
 // Replace the line below with the real launch-price deadline before deploying.
 // Format: "YYYY-MM-DDTHH:MM:SS+01:00"  (+01:00 = West Africa Time / Nigeria)
 // Example: "2026-09-15T23:59:59+01:00"
-const PRICE_INCREASE_DATE = "REPLACE_WITH_REAL_DATE";
+const PRICE_INCREASE_DATE = 2026-09-15T23:59:59+01:00;
 
 const SELAR_LINK = "https://selar.com/8arv3007y1";
 
